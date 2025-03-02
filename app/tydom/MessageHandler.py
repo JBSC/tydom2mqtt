@@ -1014,7 +1014,9 @@ class MessageHandler:
             for endpoint in i["endpoints"]:
                 if endpoint.get("error") == 0 and endpoint.get("cdata"):
                     if all(entry == {"EOR": True} for entry in endpoint["cdata"]):
-                        logger.debug("parse_devices_cdata(%s) : message ignored",parsed)
+                        logger.debug(
+                            "parse_devices_cdata(%s) : message ignored", parsed
+                        )
                         continue
 
                     try:
@@ -1033,8 +1035,17 @@ class MessageHandler:
 
                         for elem in endpoint["cdata"]:
                             if type_of_id == "conso":
-                                if elem["status"] == "srcNOK" or elem["status"] == "destNOK":
-                                    logger.debug("parse_devices_cdata(%s) : message type=%s name=%s ignored for status=%s",parsed,elem["name"],type_of_id,elem["status"])
+                                if (
+                                    elem["status"] == "srcNOK"
+                                    or elem["status"] == "destNOK"
+                                ):
+                                    logger.debug(
+                                        "parse_devices_cdata(%s) : message type=%s name=%s ignored for status=%s",
+                                        parsed,
+                                        elem["name"],
+                                        type_of_id,
+                                        elem["status"],
+                                    )
                                     continue
 
                                 if elem["name"] == "energyIndex":
@@ -1128,7 +1139,7 @@ class MessageHandler:
     # PUT response parsing v2
     def parse_put_response(self, bytes_str, start=6):
         # Decode the response into UTF-8
-        resp = bytes_str[len(self.cmd_prefix):].decode("utf-8")
+        resp = bytes_str[len(self.cmd_prefix) :].decode("utf-8")
 
         # Separate lines with \r\n
         fields = resp.split("\r\n")
@@ -1139,7 +1150,7 @@ class MessageHandler:
         # Detect and extract JSON ignoring chunk sizes
         json_chunks = []
         for field in fields:
-            if re.match(r'^[0-9A-Fa-f]+$', field):  # Ignore hex chunk sizes
+            if re.match(r"^[0-9A-Fa-f]+$", field):  # Ignore hex chunk sizes
                 continue
             if field == "0":  # End of chunked encoding
                 break
